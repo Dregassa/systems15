@@ -7,7 +7,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <wait.h>
+#include <sys/wait.h>
 
 #include "key.h"
 
@@ -23,10 +23,10 @@ void create(){
 
 void view(){
 	int fd = open("story.txt", O_RDONLY, 0);
-	
+
 	int f = fork();
-	
-	if (f == 0){ 
+
+	if (f == 0){
 		execlp("cat", "cat", "story.txt", 0);
 	}
 	else{
@@ -41,7 +41,7 @@ void rem(){
 
 	int shmd = shmget(KEY,0,0644);
 	shmctl(shmd, IPC_RMID, 0);
-	
+
 	view();
 	remove("story.txt");
 }
@@ -56,13 +56,13 @@ int main(int argc, char ** argv){
 	if (argc != 2){
 		usage();
 	}
-		
+
 
 	if ( !strcmp(argv[1], "-c") ){
 		create();
 		printf("Story Created\n");
 	}
-	
+
 	else if ( !strcmp(argv[1], "-v") ){
 		view();
 	}
